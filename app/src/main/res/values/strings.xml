@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">KerdoIndex</string>
+    <string name="pulse">Pulse</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="clear">Очистить</string>
+    <string name="set">Сохранить</string>
+    <string name="KedroIndex">Индекс Кедро</string>
+    <string name="KedroIndex1">Индекс 1</string>
+    <string name="KedroIndex2">Индекс 2</string>
+    <string name="numbermeasure">Номер измерения</string>
+    <string name="Pulse">Пульс</string>
+    <string name="DAD">ДАД</string>
+    <string name="line_mode">Режим линий</string>
+    <string name="backToEnter">Вернуться</string>
+</resources>

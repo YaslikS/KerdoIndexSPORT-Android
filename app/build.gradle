@@ -2,15 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdk 33
     defaultConfig {
         applicationId "com.AMED.kerdoindex"
-        minSdk 19
+        minSdk 26
         targetSdk 33
-        versionCode 4
-        versionName "0.5.1.001 beta"
+        versionCode 23
+        versionName "0.8 beta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -42,6 +43,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.4'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.3'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -63,5 +67,8 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 
     // GraphView
-    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    //implementation 'com.jjoe64:graphview:4.2.2'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
 }

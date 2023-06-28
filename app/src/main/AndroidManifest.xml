@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KerdoIndex">
         <activity
-            android:name="com.AMED.kerdoindex.MainActivity"
+            android:name="com.AMED.kerdoindex.view.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

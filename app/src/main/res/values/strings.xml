@@ -1,15 +1,31 @@
 <resources>
-    <string name="app_name">KerdoIndex</string>
+
+    <string name="app_name">KerdoIndexSPORT</string>
     <string name="pulse">Pulse</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="clear">Очистить</string>
-    <string name="set">Сохранить</string>
-    <string name="KedroIndex">Индекс Кедро</string>
-    <string name="KedroIndex1">Индекс 1</string>
-    <string name="KedroIndex2">Индекс 2</string>
-    <string name="numbermeasure">Номер измерения</string>
-    <string name="Pulse">Пульс</string>
-    <string name="DAD">ДАД</string>
-    <string name="line_mode">Режим линий</string>
-    <string name="backToEnter">Вернуться</string>
+    <string name="clear">Clear</string>
+    <string name="set">Save</string>
+    <string name="KedroIndex">Kedro Index</string>
+    <string name="KedroIndex1">Index 1:</string>
+    <string name="KedroIndex2">Index 2:</string>
+    <string name="numbermeasure">Number measuring</string>
+    <string name="Pulse">Pulse</string>
+    <string name="DBP">DBP</string>
+    <string name="line_mode">Line mode</string>
+    <string name="backTo">Back</string>
+    <string name="profile">Profile</string>
+    <string name="offline_mode">offline mode</string>
+    <string name="Login">Login</string>
+    <string name="emailTrainer_inTextField">Email of Trainer</string>
+    <string name="loginReference">The specified email address will be used to log in to the application.</string>
+    <string name="nameReference">Under this name, you will be displayed at the trainer.</string>
+    <string name="trainerEmailReference">The trainer email address is needed to send your data.</string>
+    <string name="your_name_in_kerdoindex_inTextField">Your name in KerdoIndex</string>
+    <string name="your_email_for_login_to_kerdoindex_inTextField">Your Email for login to KerdoIndex</string>
+    <string name="your_password_inTextField">Your password</string>
+    <string name="info_kedro1_label">Index 1: Enter the correct data in the Pressure and Pulse fields</string>
+    <string name="info_kedro2_label">Index 2: Enter the correct data in the Pressure and Pulse fields</string>
+    <string name="measuring">Measuring</string>
+    <string name="to_perform_the_measure_click_button_below">To perform the measure, click button below</string>
+
 </resources>

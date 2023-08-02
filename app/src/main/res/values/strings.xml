@@ -27,5 +27,6 @@
     <string name="info_kedro2_label">Index 2: Enter the correct data in the Pressure and Pulse fields</string>
     <string name="measuring">Measuring</string>
     <string name="to_perform_the_measure_click_button_below">To perform the measure, click button below</string>
+    <string name="registration">Registration</string>
 
 </resources>

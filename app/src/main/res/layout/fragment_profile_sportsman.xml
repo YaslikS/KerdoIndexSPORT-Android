@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ProfileSportsmanFragment">
+    tools:context=".view.profile.ProfileSportsmanFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -60,102 +60,137 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/loginMainTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log in to your kerdoIndex account:"
+                android:text="Log in or register in the system"
                 android:textSize="25dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/yourEmailTF"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/nameConstraintLayout"
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/your_email_for_login_to_kerdoindex_inTextField"
-                android:imeOptions="actionGo"
-                android:lines="1"
-                app:layout_constraintTop_toBottomOf="@+id/loginMainTV" />
+                app:layout_constraintTop_toBottomOf="@+id/loginMainTV">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/yourPassTF"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/your_password_inTextField"
-                android:imeOptions="actionGo"
-                android:inputType="textPassword"
-                android:lines="1"
-                app:layout_constraintTop_toBottomOf="@+id/yourEmailTF" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginButton"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/Login"
-                app:cornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/yourPassTF" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/loginReferenceTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/loginReference"
-                android:textSize="15sp"
-                app:layout_constraintTop_toBottomOf="@+id/loginButton" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:text="Name in the KerdoIndex:"
-                android:textSize="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginReferenceTextView" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView6"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/loginMainTV"
-                app:layout_constraintTop_toBottomOf="@+id/textView2">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name in the KerdoIndex:"
+                    android:textSize="17dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout5"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/backgroundLinear">
+                    android:layout_height="60dp"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/yourNameTF"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
+                        android:layout_width="0dp"
+                        android:layout_height="60dp"
                         android:hint="@string/your_name_in_kerdoindex_inTextField"
                         android:imeOptions="actionGo"
                         android:lines="1"
-                        android:textSize="18dp" />
+                        android:inputType="text"
+                        android:textSize="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/renameButton"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/renameButton"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:text="Rename"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/materialTextView2"
+                android:id="@+id/authInfoTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/nameReference"
+                android:layout_marginTop="15dp"
+                android:text="Log in if you already have an account, or register"
                 android:textSize="15dp"
-                app:layout_constraintTop_toBottomOf="@+id/cardView6" />
+                app:layout_constraintTop_toBottomOf="@+id/nameConstraintLayout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/regisLoginConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/authInfoTextView">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/registrationButton"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="5dp"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Registration"
+
+                    app:cornerRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/loginButton"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginButton"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/Login"
+                    app:cornerRadius="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@+id/registrationButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logoutButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/redGraph"
+                android:text="Logout"
+                app:cornerRadius="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/regisLoginConstraintLayout" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/aboutButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="About KerdoIndexSPORT"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logoutButton" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:background="@color/black" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -170,12 +205,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.5"
-            android:background="@color/black" />
 
         <ProgressBar
             android:id="@+id/progressBar"

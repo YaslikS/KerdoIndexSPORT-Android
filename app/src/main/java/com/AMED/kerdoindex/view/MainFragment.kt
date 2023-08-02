@@ -1,8 +1,6 @@
 package com.AMED.kerdoindex.view
 
 import android.animation.ObjectAnimator
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -13,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -27,10 +24,11 @@ import com.AMED.kerdoindex.databinding.FragmentMainBinding
 import com.AMED.kerdoindex.fireBaseManagers.FireBaseAuthManager
 import com.AMED.kerdoindex.fireBaseManagers.FireBaseCloudManager
 import com.AMED.kerdoindex.fireBaseManagers.hasConnection
-import com.AMED.kerdoindex.model.Measure
-import com.AMED.kerdoindex.model.MeasureJsonManager
-import com.AMED.kerdoindex.model.SharedPreferencesManager
+import com.AMED.kerdoindex.model.json.Measure
+import com.AMED.kerdoindex.model.json.MeasureJsonManager
+import com.AMED.kerdoindex.model.json.SharedPreferencesManager
 import com.AMED.kerdoindex.model.sha256
+import com.AMED.kerdoindex.view.profile.ProfileSportsmanFragment
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -38,6 +36,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import kotlinx.android.synthetic.main.fragment_registration.emailEditText
 import kotlinx.coroutines.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -75,9 +74,6 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
         Log.i(TAG, "onCreateView: entrance")
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        print("Hello, world!".sha256())
-        Log.i(TAG, "onCreateView: " + "Hello, world!".sha256())
-
         editTextsHandler()  // запуск слушателей editText
         clickListeners()    // запуск слушателей нажатий
 
@@ -109,42 +105,40 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
         checkingReachability.cancel()
     }
 
-    // состояние интернета
-    // наблюдение за ним
-    private fun startCheckingReachability(){
-        Log.i(TAG, "startCheckingReachability: entrance")
-        checkingReachability = CoroutineScope(Dispatchers.IO)
-        checkingReachability?.launch(Dispatchers.IO) {
-            while (true){
-                when (hasConnection(requireActivity())){
-                    true -> {
-                        //Log.i(TAG, "startCheckingReachability: true")
-                        launch(Dispatchers.Main) {binding?.offlineModeButton?.visibility = Button.INVISIBLE}
-                    }
-                    false -> {
-                        //Log.i(TAG, "startCheckingReachability: false")
-                        launch(Dispatchers.Main) {binding?.offlineModeButton?.visibility = Button.VISIBLE}
-                    }
-                }
-                delay(500)
-            }
-        }
-    }
-
     // попытка авторизации
     private fun tryAuth(){
         Log.i(TAG, "tryAuth: entrance")
-        if (!TextUtils.isEmpty(sharedPreferencesManager?.getYourEmail())
-            && !TextUtils.isEmpty(sharedPreferencesManager?.getPassword())
-        ) {
-            Log.i(TAG, "tryAuth: getYourEmail && getPassword != empty")
-            fireBaseAuthManager!!.login(
-                sharedPreferencesManager?.getYourEmail()!!,
-                sharedPreferencesManager?.getPassword()!!,
-                ::resultAuth
-            )
-        }
+        fireBaseAuthManager?.reAuth(:: reAuthResult)
         Log.i(TAG, "tryAuth: exit")
+    }
+
+    // результат ре-авторизации
+    private fun reAuthResult(state: Int, desc: String){
+        Log.i(TAG, "reAuthResult: entrance")
+        when (state) {
+            0 -> {  //  удачный вход
+                Log.i(TAG, "reAuthResult: state = $state")
+                fireBaseCloudManager?.getCloudData()
+            }
+            4 -> {  //  проблема с интернетом
+                Log.i(TAG, "reAuthResult: state = $state")
+                AlertDialog.Builder(requireActivity())
+                    .setTitle("Check your internet connection")
+                    .setPositiveButton("OK") { _, _ ->
+                        //binding?.progressCL?.visibility = ConstraintLayout.INVISIBLE
+                        Log.i(TAG, "reAuthResult: AlertDialog: OK")
+                    }.show()
+            }
+            else -> {
+                Log.i(TAG, "reAuthResult: state = $state")
+                AlertDialog.Builder(requireActivity())
+                    .setTitle("Unexpected login error. Try login manually")
+                    .setPositiveButton("OK") { _, _ ->
+                        //binding?.progressCL?.visibility = ConstraintLayout.INVISIBLE
+                        Log.i(TAG, "reAuthResult: AlertDialog: OK")
+                    }.show()
+            }
+        }
     }
 
     // слушатели нажатий
@@ -902,5 +896,27 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
         Log.i(TAG, "onDestroyView: entrance")
         binding = null  //  ...уничтожаем объектов view-элементов
         super.onDestroyView()
+    }
+
+    // состояние интернета
+    // наблюдение за ним
+    private fun startCheckingReachability(){
+        Log.i(TAG, "startCheckingReachability: entrance")
+        checkingReachability = CoroutineScope(Dispatchers.IO)
+        checkingReachability?.launch(Dispatchers.IO) {
+            while (true){
+                when (hasConnection(requireActivity())){
+                    true -> {
+                        //Log.i(TAG, "startCheckingReachability: true")
+                        launch(Dispatchers.Main) {binding?.offlineModeButton?.visibility = Button.INVISIBLE}
+                    }
+                    false -> {
+                        //Log.i(TAG, "startCheckingReachability: false")
+                        launch(Dispatchers.Main) {binding?.offlineModeButton?.visibility = Button.VISIBLE}
+                    }
+                }
+                delay(500)
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.AMED.kerdoindex.model
+package com.AMED.kerdoindex.model.json
 
 import android.util.Log
 import com.google.gson.Gson

@@ -1,4 +1,4 @@
-package com.AMED.kerdoindex.model
+package com.AMED.kerdoindex.model.json
 
 data class JsonStructure(
     var name1: String = "measures1",

@@ -1,4 +1,4 @@
-package com.AMED.kerdoindex.model
+package com.AMED.kerdoindex.model.json
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -94,6 +94,16 @@ class SharedPreferencesManager(context: Context) {
         return settings?.getString("lastDate","")!!
     }
 
+
+    // удаление всех данных
+    fun deleteUserInfo() {
+        Log.i(TAG, "deleteUserInfo: entrance")
+        savePassword("0")
+        saveYourEmail("0")
+        saveYourName("0")
+        saveIdUser("")
+        saveYourImageURL("")
+    }
 
     // MANAGE
     // стереть все настройки

@@ -10,8 +10,8 @@ android {
         applicationId "com.AMED.kerdoindex"
         minSdk 26
         targetSdk 33
-        versionCode 23
-        versionName "0.8 beta"
+        versionCode 2333
+        versionName "0.9 beta"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

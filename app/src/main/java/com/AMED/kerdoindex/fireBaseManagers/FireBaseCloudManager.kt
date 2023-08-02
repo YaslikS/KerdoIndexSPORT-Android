@@ -1,15 +1,12 @@
 package com.AMED.kerdoindex.fireBaseManagers
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
-import com.AMED.kerdoindex.model.SharedPreferencesManager
-import com.AMED.kerdoindex.model.User
+import com.AMED.kerdoindex.model.json.SharedPreferencesManager
+import com.AMED.kerdoindex.model.json.User
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -31,8 +28,8 @@ class FireBaseCloudManager(context: Context) {
         var user = User(
             sharedPreferencesManager?.getIdUser(),
             "s",
-            sharedPreferencesManager?.getYourName(),
-            sharedPreferencesManager?.getYourEmail(),
+            name = sharedPreferencesManager?.getYourName(),
+            email = sharedPreferencesManager?.getYourEmail(),
             sharedPreferencesManager?.getYourImageURL(),
             "",
             sharedPreferencesManager?.getLastDate(),
@@ -161,6 +158,9 @@ class FireBaseCloudManager(context: Context) {
             .addOnSuccessListener { result ->
                 Log.i(TAG, "getCloudData: getted document = " + result.get("lastDate"))
                 syncData(result)
+                val name = result.get("name")
+                Log.i(TAG, "getCloudData: getted name = $name")
+                sharedPreferencesManager!!.saveYourName(name as String)
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "getCloudData: Error getting documents.", exception)

@@ -1,4 +1,4 @@
-package com.AMED.kerdoindex.model
+package com.AMED.kerdoindex.model.json
 
 data class Measure(
     val id: String? = "",       //  id

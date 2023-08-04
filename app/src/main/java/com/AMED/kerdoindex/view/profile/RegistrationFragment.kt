@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import com.AMED.kerdoindex.R
 import com.AMED.kerdoindex.databinding.FragmentRegistrationBinding
@@ -68,6 +69,7 @@ class RegistrationFragment : Fragment() {
                     binding?.passEditText?.text.toString()?.sha256(),
                     ::resultRegis
                 )
+                binding?.regisProgressBar?.visibility = ProgressBar.VISIBLE
             } else {
                 Log.i(
                     TAG,
@@ -103,11 +105,13 @@ class RegistrationFragment : Fragment() {
                 )
                 sharedPreferencesManager?.saveYourName(binding?.nameEditText?.text.toString())
                 fireBaseCloudManager?.addUserInCloudData()
+                binding?.regisProgressBar?.visibility = ProgressBar.INVISIBLE
                 activity?.supportFragmentManager?.popBackStack()
             }
 
             1 -> {  //  НЕудачная авторизация
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.regisProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("Error: $desc")
                     .setPositiveButton("OK") { _, _ ->
@@ -118,6 +122,7 @@ class RegistrationFragment : Fragment() {
 
             2 -> {  //  уже есть такой пользователь
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.regisProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("This user already exists")
                     .setPositiveButton("OK") { _, _ ->
@@ -128,6 +133,7 @@ class RegistrationFragment : Fragment() {
 
             3 -> {  //  проблема с интернетом
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.regisProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("Check your internet connection")
                     .setPositiveButton("OK") { _, _ ->
@@ -137,6 +143,7 @@ class RegistrationFragment : Fragment() {
             }
 
             else -> {
+                binding?.regisProgressBar?.visibility = ProgressBar.INVISIBLE
                 Log.i(TAG, "resultAuth: state = $state")
             }
         }
@@ -187,11 +194,14 @@ class RegistrationFragment : Fragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {
+                Log.i(TAG, "nameEditText: afterTextChanged: entrance")
                 binding?.nameEditText?.error = null
                 if (binding?.passEditText?.text?.isNotEmpty()!!) {
+                    Log.i(TAG, "nameEditText: afterTextChanged: isNotEmpty")
                     nameValid = true
                     binding?.passEditText?.error = null
                 } else {
+                    Log.i(TAG, "nameEditText: afterTextChanged: Empty")
                     nameValid = false
                     binding?.passEditText?.error = "Enter a name"
                 }
@@ -242,6 +252,7 @@ class RegistrationFragment : Fragment() {
         startCheckingReachability()
         checkEmailETs()     // запуск слушателей editText
         clickListeners()    // запуск слушателей нажатий
+        binding?.regisProgressBar?.visibility = ProgressBar.INVISIBLE
     }
 
     override fun onResume() {

@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import com.AMED.kerdoindex.R
 import com.AMED.kerdoindex.databinding.FragmentLoginBinding
@@ -68,6 +69,7 @@ class LoginFragment : Fragment() {
                     binding?.passEditText?.text.toString()?.sha256(),
                     ::resultLogin
                 )
+                binding?.loginProgressBar?.visibility = ProgressBar.VISIBLE
             } else {
                 Log.i(
                     TAG,
@@ -103,45 +105,46 @@ class LoginFragment : Fragment() {
 
             1 -> {  //  НЕудачный вход
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("Error: $desc")
                     .setPositiveButton("OK") { _, _ ->
-                        //binding?.progressCL?.visibility = ConstraintLayout.INVISIBLE
                         Log.i(TAG, "resultAuth: AlertDialog: OK")
                     }.show()
             }
 
             2 -> {  //  неправильный пароль
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("Incorrect password")
                     .setPositiveButton("OK") { _, _ ->
-                        //binding?.progressCL?.visibility = ConstraintLayout.INVISIBLE
                         Log.i(TAG, "resultAuth: AlertDialog: OK")
                     }.show()
             }
 
             3 -> {  //  такого пользователя нет
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("There is no such user")
                     .setPositiveButton("OK") { _, _ ->
-                        //binding?.progressCL?.visibility = ConstraintLayout.INVISIBLE
                         Log.i(TAG, "resultAuth: AlertDialog: OK")
                     }.show()
             }
 
             4 -> {  //  проблема с интернетом
                 Log.i(TAG, "resultAuth: state = $state")
+                binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                 AlertDialog.Builder(requireActivity())
                     .setTitle("Check your internet connection")
                     .setPositiveButton("OK") { _, _ ->
-                        //binding?.progressCL?.visibility = ConstraintLayout.INVISIBLE
                         Log.i(TAG, "resultAuth: AlertDialog: OK")
                     }.show()
             }
 
             else -> {
+                binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                 Log.i(TAG, "resultAuth: state = $state")
             }
         }
@@ -160,8 +163,10 @@ class LoginFragment : Fragment() {
                     sharedPreferencesManager?.savePassword(
                         binding?.passEditText?.text.toString().sha256()
                     )
+                    binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                     activity?.supportFragmentManager?.popBackStack()
                 } else {
+                    binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                     fireBaseAuthManager?.logOut()
                     sharedPreferencesManager?.deleteUserInfo()
                     AlertDialog.Builder(requireActivity())
@@ -174,6 +179,7 @@ class LoginFragment : Fragment() {
 
             0 -> {
                 Log.i(TAG, "resultTypeUser: state = 1")
+                binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
                 fireBaseAuthManager?.logOut()
                 sharedPreferencesManager?.deleteUserInfo()
                 AlertDialog.Builder(requireActivity())
@@ -269,6 +275,7 @@ class LoginFragment : Fragment() {
         startCheckingReachability()
         checkEmailETs()     // запуск слушателей editText
         clickListeners()    // запуск слушателей нажатий
+        binding?.loginProgressBar?.visibility = ProgressBar.INVISIBLE
     }
 
     override fun onResume() {

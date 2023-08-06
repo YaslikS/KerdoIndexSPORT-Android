@@ -3,6 +3,7 @@ package com.AMED.kerdoindex.model.json
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.AMED.kerdoindex.model.Strings
 
 
 class SharedPreferencesManager(context: Context) {
@@ -48,13 +49,13 @@ class SharedPreferencesManager(context: Context) {
 
     // массив в формате json с измерениями
     fun saveJson(json: String) {
-        prefEditor.putString("json", json)
+        prefEditor.putString(Strings.jsonFieldStr.value, json)
         prefEditor.apply()
     }
 
     // дата последней синхронизации измерений
     fun saveLastDate(lastDate: String) {
-        prefEditor.putString("lastDate", lastDate)
+        prefEditor.putString(Strings.lastDateFieldStr.value, lastDate)
         prefEditor.apply()
     }
 
@@ -86,12 +87,12 @@ class SharedPreferencesManager(context: Context) {
 
     // массив в формате json с измерениями
     fun getJson(): String {
-        return settings?.getString("json", "empty")!!
+        return settings?.getString(Strings.jsonFieldStr.value, Strings.jsonEmptyFieldStr.value)!!
     }
 
     // дата последней синхронизации измерений
     fun getLastDate(): String {
-        return settings?.getString("lastDate","")!!
+        return settings?.getString(Strings.lastDateFieldStr.value, "")!!
     }
 
 

@@ -47,7 +47,13 @@ class AboutFragment : Fragment() {
         binding?.nameAppTextView?.text = "KerdoIndexSPORT $version"
 
         binding?.infoAppTextView?.text =
-            "KerdoIndexSPORT $version (" + BuildConfig.VERSION_CODE + ") / " + Build.MODEL + " / Android " + Build.VERSION.RELEASE + "\n" + "OOO \"A-MED\" " + "https://amed-rus.com/"
+            "KerdoIndexSPORT $version (" +
+                    BuildConfig.VERSION_CODE +
+                    ") / " + Build.MODEL +
+                    " / Android " +
+                    Build.VERSION.RELEASE +
+                    "\n" + "OOO \"A-MED\" " +
+                    "https://amed-rus.com/"
 
         clickListeners()    // запуск слушателей нажатий
     }

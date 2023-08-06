@@ -2,7 +2,6 @@ package com.AMED.kerdoindex.fireBaseManagers
 
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.core.content.ContextCompat.getSystemService
 
 // функция отслеживания интернета
 @Suppress("DEPRECATION")
@@ -17,5 +16,5 @@ fun hasConnection(context: Context): Boolean {
     wifiInfo = cm.activeNetworkInfo
 
     return if (wifiInfo != null && wifiInfo.isConnected) true
-        else false
+    else false
 }

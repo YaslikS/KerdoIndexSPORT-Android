@@ -2,6 +2,7 @@ package com.AMED.kerdoindex.fireBaseManagers
 
 import android.content.Context
 import android.util.Log
+import com.AMED.kerdoindex.model.Strings
 import com.AMED.kerdoindex.model.json.SharedPreferencesManager
 import com.AMED.kerdoindex.model.json.User
 import com.google.firebase.firestore.DocumentSnapshot
@@ -23,8 +24,12 @@ class FireBaseCloudManager(context: Context) {
     // создание пользователя
     fun addUserInCloudData() {
         Log.i(TAG, "addUserInCloudData: entrance")
-        var jsonForUpdate = if (sharedPreferencesManager?.getJson() == "empty") { ""
-        } else { sharedPreferencesManager?.getJson()!! }
+        var jsonForUpdate =
+            if (sharedPreferencesManager?.getJson() == Strings.jsonEmptyFieldStr.value) {
+                ""
+            } else {
+                sharedPreferencesManager?.getJson()!!
+            }
         var user = User(
             sharedPreferencesManager?.getIdUser(),
             "s",
@@ -41,7 +46,7 @@ class FireBaseCloudManager(context: Context) {
             "addUserInCloudData: user.id = " + user.id + " user.name = " + user.name + " user.email " + user.email
         )
 
-        db.collection("users")
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
             .set(user)
             .addOnSuccessListener { documentReference ->
@@ -62,16 +67,20 @@ class FireBaseCloudManager(context: Context) {
             "updateJsonInCloudData: userId = " + sharedPreferencesManager?.getIdUser()!!
                     + " jsonUser = { " + sharedPreferencesManager?.getJson()!! + " }"
         )
-        var jsonForUpdate = if (sharedPreferencesManager?.getJson() == "empty") {
-            ""
-        } else {
-            sharedPreferencesManager?.getJson()!!
-        }
-        db.collection("users")
+        var jsonForUpdate =
+            if (sharedPreferencesManager?.getJson() == Strings.jsonEmptyFieldStr.value) {
+                ""
+            } else {
+                sharedPreferencesManager?.getJson()!!
+            }
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
-            .update("json", jsonForUpdate)
+            .update(Strings.jsonFieldStr.value, jsonForUpdate)
             .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "updateJsonInCloudDataЖ DocumentSnapshot added with ID: ${documentReference}")
+                Log.d(
+                    TAG,
+                    "updateJsonInCloudDataЖ DocumentSnapshot added with ID: ${documentReference}"
+                )
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "updateJsonInCloudDataЖ Error editing user info.", exception)
@@ -85,11 +94,14 @@ class FireBaseCloudManager(context: Context) {
             "updateLastDateInCloudData: userId = " + sharedPreferencesManager?.getIdUser()!!
                     + " lastDateUser = " + sharedPreferencesManager?.getLastDate()!!
         )
-        db.collection("users")
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
-            .update("lastDate", sharedPreferencesManager?.getLastDate())
+            .update(Strings.lastDateFieldStr.value, sharedPreferencesManager?.getLastDate())
             .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "updateLastDateInCloudData: DocumentSnapshot added with ID: ${documentReference}")
+                Log.d(
+                    TAG,
+                    "updateLastDateInCloudData: DocumentSnapshot added with ID: ${documentReference}"
+                )
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "updateLastDateInCloudData: Error editing user info.", exception)
@@ -103,11 +115,14 @@ class FireBaseCloudManager(context: Context) {
             "updateNameInCloudData: userId = " + sharedPreferencesManager?.getIdUser()!!
                     + " nameUser = " + sharedPreferencesManager?.getYourName()!!
         )
-        db.collection("users")
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
-            .update("name", sharedPreferencesManager?.getYourName())
+            .update(Strings.nameFieldStr.value, sharedPreferencesManager?.getYourName())
             .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "updateNameInCloudData: DocumentSnapshot added with ID: ${documentReference}")
+                Log.d(
+                    TAG,
+                    "updateNameInCloudData: DocumentSnapshot added with ID: ${documentReference}"
+                )
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "updateNameInCloudData: Error update Name info.", exception)
@@ -121,9 +136,9 @@ class FireBaseCloudManager(context: Context) {
             "addUserInCloudData: userId = " + sharedPreferencesManager?.getIdUser()!!
                     + " iconUrlUser = { " + sharedPreferencesManager?.getYourImageURL()!! + " }"
         )
-        db.collection("users")
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
-            .update("iconUrl", sharedPreferencesManager?.getYourImageURL())
+            .update(Strings.iconUrlFieldStr.value, sharedPreferencesManager?.getYourImageURL())
             .addOnSuccessListener { documentReference ->
                 Log.d("editInCloudData", "DocumentSnapshot added with ID: ${documentReference}")
             }
@@ -135,7 +150,7 @@ class FireBaseCloudManager(context: Context) {
     // удаление пользователя
     fun deleteInCloudData() {
         Log.i(TAG, "deleteInCloudData: entrance")
-        db.collection("users")
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
             .delete()
             .addOnSuccessListener { documentReference ->
@@ -152,13 +167,16 @@ class FireBaseCloudManager(context: Context) {
     // получение данных пользователя
     fun getCloudData() {
         Log.i(TAG, "getCloudData: entrance")
-        db.collection("users")
+        db.collection(Strings.usersTableStr.value)
             .document(sharedPreferencesManager?.getIdUser()!!)
             .get()
             .addOnSuccessListener { result ->
-                Log.i(TAG, "getCloudData: getted document = " + result.get("lastDate"))
+                Log.i(
+                    TAG,
+                    "getCloudData: getted document = " + result.get(Strings.lastDateFieldStr.value)
+                )
                 syncData(result)
-                val name = result.get("name")
+                val name = result.get(Strings.nameFieldStr.value)
                 Log.i(TAG, "getCloudData: getted name = $name")
                 sharedPreferencesManager!!.saveYourName(name as String)
             }
@@ -168,19 +186,19 @@ class FireBaseCloudManager(context: Context) {
     }
 
     // синхронизация данных между сервером и телефоном
-    private fun syncData(result: DocumentSnapshot){
-        if (result.get("lastDate") == "" || result.get("json") == ""){  //  если облако пустое
+    private fun syncData(result: DocumentSnapshot) {
+        if (result.get(Strings.lastDateFieldStr.value) == "" || result.get(Strings.jsonFieldStr.value) == "") {  //  если облако пустое
             Log.i(TAG, "syncData: cloud is empty")
             updateJsonInCloudData()
             updateLastDateInCloudData()
         } else {    //  если облако НЕ пустое
-            if (sharedPreferencesManager?.getLastDate()!! != ""){    //  телефон НЕ пуст
+            if (sharedPreferencesManager?.getLastDate()!! != "") {    //  телефон НЕ пуст
                 val resultOfComparison = dataComparison(result)
-                if (resultOfComparison > 0){        //  облако актуальнее телефона
+                if (resultOfComparison > 0) {        //  облако актуальнее телефона
                     Log.i(TAG, "syncData: resultOfComparison > 0")
-                    sharedPreferencesManager?.saveLastDate(result.get("lastDate") as String)
-                    sharedPreferencesManager?.saveJson(result.get("json") as String)
-                } else if (resultOfComparison < 0){ //  телефон актуальнее облака
+                    sharedPreferencesManager?.saveLastDate(result.get(Strings.lastDateFieldStr.value) as String)
+                    sharedPreferencesManager?.saveJson(result.get(Strings.jsonFieldStr.value) as String)
+                } else if (resultOfComparison < 0) { //  телефон актуальнее облака
                     Log.i(TAG, "syncData: resultOfComparison < 0")
                     updateJsonInCloudData()
                     updateLastDateInCloudData()
@@ -189,16 +207,16 @@ class FireBaseCloudManager(context: Context) {
                 }
             } else {    //  телефон пуст
                 Log.i(TAG, "syncData: phone is empty")
-                sharedPreferencesManager?.saveLastDate(result.get("lastDate") as String)
-                sharedPreferencesManager?.saveJson(result.get("json") as String)
+                sharedPreferencesManager?.saveLastDate(result.get(Strings.lastDateFieldStr.value) as String)
+                sharedPreferencesManager?.saveJson(result.get(Strings.jsonFieldStr.value) as String)
             }
         }
     }
 
     // сравнение дат
-    private fun dataComparison(result: DocumentSnapshot) : Int {
+    private fun dataComparison(result: DocumentSnapshot): Int {
         Log.i(TAG, "dataComparison: entrance")
-        val cloudDateStr = result.get("lastDate") as String
+        val cloudDateStr = result.get(Strings.lastDateFieldStr.value) as String
         val phoneDateStr = sharedPreferencesManager?.getLastDate()
 
         Log.i(TAG, "dataComparison: cloudDateStr = $cloudDateStr")
@@ -211,14 +229,14 @@ class FireBaseCloudManager(context: Context) {
     }
 
     // получение типа пользователя
-    fun getTypeUser(email: String, resultGetTypeUser: (Int, String?) -> Unit){
+    fun getTypeUser(email: String, resultGetTypeUser: (Int, String?) -> Unit) {
         Log.i(TAG, "getTypeUser: entrance")
-        db.collection("users")
-            .whereEqualTo("email", email)
+        db.collection(Strings.usersTableStr.value)
+            .whereEqualTo(Strings.emailFieldStr.value, email)
             .get()
             .addOnSuccessListener { documents ->
-                Log.i(TAG, "getTypeUser: type user = " + documents.documents[0].get("type"))
-                val typeStr = documents.documents[0].get("type") as String
+                Log.i(TAG, "getTypeUser: type user = " + documents.documents[0].get(Strings.typeFieldStr.value))
+                val typeStr = documents.documents[0].get(Strings.typeFieldStr.value) as String
                 resultGetTypeUser(1, typeStr)
             }
             .addOnFailureListener { exception ->

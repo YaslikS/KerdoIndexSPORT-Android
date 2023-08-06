@@ -5,20 +5,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.AMED.kerdoindex.R
 import com.AMED.kerdoindex.databinding.FragmentRegistrationBinding
 import com.AMED.kerdoindex.fireBaseManagers.FireBaseAuthManager
 import com.AMED.kerdoindex.fireBaseManagers.FireBaseCloudManager
 import com.AMED.kerdoindex.fireBaseManagers.hasConnection
 import com.AMED.kerdoindex.model.json.SharedPreferencesManager
-import com.AMED.kerdoindex.model.sha256
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -66,7 +65,7 @@ class RegistrationFragment : Fragment() {
                 )
                 fireBaseAuthManager?.auth(
                     binding?.emailEditText?.text.toString(),
-                    binding?.passEditText?.text.toString()?.sha256(),
+                    binding?.passEditText?.text.toString(),
                     ::resultRegis
                 )
                 binding?.regisProgressBar?.visibility = ProgressBar.VISIBLE
@@ -101,7 +100,7 @@ class RegistrationFragment : Fragment() {
                 Log.i(TAG, "resultAuth: state = $state")
                 sharedPreferencesManager?.saveYourEmail(binding?.emailEditText?.text.toString())
                 sharedPreferencesManager?.savePassword(
-                    binding?.passEditText?.text.toString().sha256()
+                    binding?.passEditText?.text.toString()
                 )
                 sharedPreferencesManager?.saveYourName(binding?.nameEditText?.text.toString())
                 fireBaseCloudManager?.addUserInCloudData()

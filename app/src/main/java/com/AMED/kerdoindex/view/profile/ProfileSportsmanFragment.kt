@@ -1,8 +1,6 @@
 package com.AMED.kerdoindex.view.profile
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +18,11 @@ import com.AMED.kerdoindex.fireBaseManagers.FireBaseCloudManager
 import com.AMED.kerdoindex.fireBaseManagers.hasConnection
 import com.AMED.kerdoindex.model.json.SharedPreferencesManager
 import com.AMED.kerdoindex.view.AboutFragment
-import kotlinx.android.synthetic.main.fragment_profile_sportsman.logoutButton
-import kotlinx.android.synthetic.main.fragment_registration.emailEditText
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ProfileSportsmanFragment : Fragment() {
 
@@ -102,7 +102,7 @@ class ProfileSportsmanFragment : Fragment() {
             }.setNeutralButton("Delete Account") { _, _ ->
                 Log.i(TAG, "loginAction: delete Account: entrance")
                 fireBaseCloudManager?.deleteInCloudData()
-                fireBaseAuthManager?.deleteAccount(:: resultLogin)
+                fireBaseAuthManager?.deleteAccount(::resultLogin)
             }
             .setPositiveButton("Cancel", null).show()
     }
@@ -116,6 +116,7 @@ class ProfileSportsmanFragment : Fragment() {
                 sharedPreferencesManager?.deleteUserInfo()
                 updateViewsViews()
             }
+
             1 -> {  //  НЕудачное удаление
                 Log.i(TAG, "resultLogin: state = $state")
                 AlertDialog.Builder(requireActivity())
@@ -125,6 +126,7 @@ class ProfileSportsmanFragment : Fragment() {
                         Log.i(TAG, "resultAuth: AlertDialog: OK")
                     }.show()
             }
+
             else -> {   //  НЕудачное удаление
                 Log.i(TAG, "resultLogin: state = $state")
             }

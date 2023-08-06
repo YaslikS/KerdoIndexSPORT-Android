@@ -3,7 +3,6 @@ package com.AMED.kerdoindex.view
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,10 +23,10 @@ import com.AMED.kerdoindex.databinding.FragmentMainBinding
 import com.AMED.kerdoindex.fireBaseManagers.FireBaseAuthManager
 import com.AMED.kerdoindex.fireBaseManagers.FireBaseCloudManager
 import com.AMED.kerdoindex.fireBaseManagers.hasConnection
+import com.AMED.kerdoindex.model.Strings
 import com.AMED.kerdoindex.model.json.Measure
 import com.AMED.kerdoindex.model.json.MeasureJsonManager
 import com.AMED.kerdoindex.model.json.SharedPreferencesManager
-import com.AMED.kerdoindex.model.sha256
 import com.AMED.kerdoindex.view.profile.ProfileSportsmanFragment
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
@@ -36,11 +35,15 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import kotlinx.android.synthetic.main.fragment_registration.emailEditText
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import kotlin.math.roundToInt
 
 class MainFragment : Fragment(), OnChartValueSelectedListener {
@@ -106,20 +109,21 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
     }
 
     // попытка авторизации
-    private fun tryAuth(){
+    private fun tryAuth() {
         Log.i(TAG, "tryAuth: entrance")
-        fireBaseAuthManager?.reAuth(:: reAuthResult)
+        fireBaseAuthManager?.reAuth(::reAuthResult)
         Log.i(TAG, "tryAuth: exit")
     }
 
     // результат ре-авторизации
-    private fun reAuthResult(state: Int, desc: String){
+    private fun reAuthResult(state: Int, desc: String) {
         Log.i(TAG, "reAuthResult: entrance")
         when (state) {
             0 -> {  //  удачный вход
                 Log.i(TAG, "reAuthResult: state = $state")
                 fireBaseCloudManager?.getCloudData()
             }
+
             4 -> {  //  проблема с интернетом
                 Log.i(TAG, "reAuthResult: state = $state")
                 AlertDialog.Builder(requireActivity())
@@ -129,6 +133,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
                         Log.i(TAG, "reAuthResult: AlertDialog: OK")
                     }.show()
             }
+
             else -> {
                 Log.i(TAG, "reAuthResult: state = $state")
                 AlertDialog.Builder(requireActivity())
@@ -282,7 +287,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
                 Log.i(TAG, "clearAll: setPositiveButton: entrance")
                 measures1.clear()
                 measures2.clear()
-                sharedPreferencesManager?.saveJson("empty")
+                sharedPreferencesManager?.saveJson(Strings.jsonEmptyFieldStr.value)
                 sharedPreferencesManager?.saveLastDate("")
                 clearGraths()
                 jsonIsEmpty()
@@ -327,41 +332,12 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
         Log.i(TAG, "onNothingSelected")
     }
 
-    // обработка результата авторизации
-    private fun resultAuth(state: Int) {
-        when (state) {
-            0 -> {  //  неудачная авторизация
-                Log.i(TAG, "resultAuth: entrance: state = $state")
-                binding?.hatCL?.setBackgroundColor(ContextCompat.getColor(requireActivity(),
-                    R.color.redGraph))
-                binding?.appTitle?.text = "You not logged in!"
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(3000)
-                    binding?.hatCL?.setBackgroundColor(ContextCompat.getColor(requireActivity(),
-                        R.color.backgroundLinear))
-                    delay(6000)
-                    launch(Dispatchers.Main){ binding?.appTitle?.text = "KerdoIndexSPORT" }
-                }
-            }
-            1 -> {  //  удачная авторизация
-                Log.i(TAG, "resultAuth: entrance: state = $state")
-                if (fireBaseAuthManager?.authWas!!) {
-                    Log.i(TAG, "resultAuth: authWas == true")
-                    fireBaseCloudManager?.addUserInCloudData()
-                } else {
-                    Log.i(TAG, "resultAuth: authWas == false")
-                    fireBaseCloudManager?.getCloudData()
-                }
-            }
-        }
-    }
-
     // получение json с измерениями
     private fun gettingJson() {
         CoroutineScope(Dispatchers.IO).launch {
             Log.i(TAG, "gettingJson: entrance")
             val json = sharedPreferencesManager?.getJson()!!
-            if (json != "empty" && json != "") {   //  проверка на отсутствие измерений
+            if (json != Strings.jsonEmptyFieldStr.value && json != "") {   //  проверка на отсутствие измерений
                 Log.i(TAG, "gettingJson: json != empty")
                 launch(Dispatchers.Main) {
                     jsonIsNotEmpty()
@@ -381,7 +357,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
     }
 
     // json НЕ пустой
-    private fun jsonIsNotEmpty(){
+    private fun jsonIsNotEmpty() {
         Log.i(TAG, "jsonIsNotEmpty: entrance")
         binding?.graphKedro?.visibility = BarChart.VISIBLE
         binding?.graphDAD?.visibility = BarChart.VISIBLE
@@ -390,7 +366,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
     }
 
     // если json пустой
-    private fun jsonIsEmpty(){
+    private fun jsonIsEmpty() {
         Log.i(TAG, "jsonIsEmpty: entrance")
         binding?.graphKedro?.visibility = BarChart.INVISIBLE
         binding?.graphDAD?.visibility = BarChart.INVISIBLE
@@ -438,7 +414,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
             }
         }
         //  настройка данных графика
-        val set = BarDataSet(values, "Values")
+        val set = BarDataSet(values, Strings.valuesFieldStr.value)
         set.colors = colors
         //  настройка отображения графика
         val data = BarData(set)
@@ -473,7 +449,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
             values.add(BarEntry((index + 1).toFloat(), entry2.Pulse?.toFloat()!!))
         }
         //  настройка данных графика
-        val set = BarDataSet(values, "Values")
+        val set = BarDataSet(values, Strings.valuesFieldStr.value)
         //  настройка отображения графика
         val data = BarData(set)
         data.setValueTextSize(12f)
@@ -508,7 +484,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
             values.add(BarEntry((index + 1).toFloat(), entry2.DAD?.toFloat()!!))
         }
         //  настройка данных графика
-        val set = BarDataSet(values, "Values")
+        val set = BarDataSet(values, Strings.valuesFieldStr.value)
         //  настройка отображения графика
         val data = BarData(set)
         data.setValueTextSize(12f)
@@ -862,7 +838,7 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
             Log.i(TAG, "installNameUser: entrance")
             CoroutineScope(Dispatchers.IO).launch {
                 delay(3000)
-                launch(Dispatchers.Main){
+                launch(Dispatchers.Main) {
                     binding?.appTitle?.text = sharedPreferencesManager?.getYourName()
                 }
             }
@@ -900,19 +876,24 @@ class MainFragment : Fragment(), OnChartValueSelectedListener {
 
     // состояние интернета
     // наблюдение за ним
-    private fun startCheckingReachability(){
+    private fun startCheckingReachability() {
         Log.i(TAG, "startCheckingReachability: entrance")
         checkingReachability = CoroutineScope(Dispatchers.IO)
         checkingReachability?.launch(Dispatchers.IO) {
-            while (true){
-                when (hasConnection(requireActivity())){
+            while (true) {
+                when (hasConnection(requireActivity())) {
                     true -> {
                         //Log.i(TAG, "startCheckingReachability: true")
-                        launch(Dispatchers.Main) {binding?.offlineModeButton?.visibility = Button.INVISIBLE}
+                        launch(Dispatchers.Main) {
+                            binding?.offlineModeButton?.visibility = Button.INVISIBLE
+                        }
                     }
+
                     false -> {
                         //Log.i(TAG, "startCheckingReachability: false")
-                        launch(Dispatchers.Main) {binding?.offlineModeButton?.visibility = Button.VISIBLE}
+                        launch(Dispatchers.Main) {
+                            binding?.offlineModeButton?.visibility = Button.VISIBLE
+                        }
                     }
                 }
                 delay(500)
